@@ -1,6 +1,45 @@
 import React, { useEffect, useState } from 'react';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+
 // import jwt from 'jsonwebtoken'
 import { useNavigate } from 'react-router-dom';
+
+const columns = [
+    { 
+        id: 'deviceId', 
+        label: 'DeviceId', 
+        minWidth: 170 
+    },
+    { 
+        id: 'moisture', 
+        label: 'Soil Moisture', 
+        minWidth: 200,
+        align: 'right',
+        format: (value) => value.toFixed(3), 
+    },
+    {
+      id: 'recievedAt',
+      label: 'Recieved at',
+      minWidth: 300,
+      align: 'right',
+      format: (value) => value.toLocaleString('en-US'),
+    },
+    {
+      id: 'timestamp',
+      label: 'Timestamp',
+      minWidth: 200,
+      align: 'right',
+    }
+  ];
+
+
 // import {useHistory} from 'react-router-dom'
 
 const Dashboard = () => {
@@ -9,7 +48,7 @@ const Dashboard = () => {
     //const [name, setName] = useState('Rohit');
 
     async function showDashboard(){
-        const req = await fetch('http://localhost:1337/api/dashboard', {
+        const req = await fetch('http://45.79.125.11/dashboard', {
             method: 'GET',
             headers: {
                 'x-access-token': localStorage.getItem('token'),
@@ -45,34 +84,111 @@ const Dashboard = () => {
         }
     }, [])
 
-   
-
-    const readings = sensorData.map((reading) => {
-        return (<tr>
-            <td>{reading.deviceId}</td>
-            <td>{reading.payload.moisture}</td>
-            <td>{reading.recievedAt}</td>
-            <td>{reading.timestamp}</td>
-        </tr>);
+    const rows = sensorData.map(row => {
+        const { deviceId, recievedAt, timestamp } = row;
+        const moisture = row.payload.moisture;
+        return { deviceId, moisture, recievedAt, timestamp  }
     })
 
-    return <div>
-        <h1>User Dashboard!</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>deviceId</th>
-                    <th>Moisture</th>
-                    <th>recievedAt</th>
-                    <th>timestamp</th>
-                </tr>
-            </thead>
-            <tbody>
-                {readings}
-            </tbody>
-        </table>
+    console.log(rows);
+    return StickyHeadTable(rows);
+  }
 
-    </div>
-}
+   
 
-export default Dashboard;
+//     const readings = sensorData.map((reading) => {
+//         return (<tr>
+//             <td>{reading.deviceId}</td>
+//             <td>{reading.payload.moisture}</td>
+//             <td>{reading.recievedAt}</td>
+//             <td>{reading.timestamp}</td>
+//         </tr>);
+//     })
+
+//     return <div className='App-header'>
+//         <header>
+//             <h1>User Dashboard!</h1>
+//         </header>
+//         <table>
+//             <thead>
+//                 <tr>
+//                     <th>deviceId</th>
+//                     <th>Moisture</th>
+//                     <th>recievedAt</th>
+//                     <th>timestamp</th>
+//                 </tr>
+//             </thead>
+//             <tbody>
+//                 {readings}
+//             </tbody>
+//         </table>
+
+//     </div>
+// }
+
+
+
+function StickyHeadTable(rows) {
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  
+    const handleChangePage = (event, newPage) => {
+      setPage(newPage);
+    };
+  
+    const handleChangeRowsPerPage = (event) => {
+      setRowsPerPage(+event.target.value);
+      setPage(0);
+    };
+  
+    return (
+      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+        <TableContainer sx={{ maxHeight: 440 }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => {
+                  return (
+                    <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                      {columns.map((column) => {
+                        const value = row[column.id];
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            {value}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>
+    );
+  }
+
+  export default Dashboard;

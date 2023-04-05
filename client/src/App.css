@@ -1,16 +1,6 @@
 .App {
+  color: white;
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
 }
 
 .App-header {
@@ -24,15 +14,83 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+
+/* ********** Style for register and login form ************* */
+
+.register-ctn, .login-ctn{
+  width: 80%;
+  max-width: 400px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.email-ctn, .password-ctn{
+  position: relative;
+  font-size: 1rem;
+  margin: 1.5em 0em 0em;
 }
+
+form label{
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: rgb(150, 150, 150);
+  transition: 0.5s ease;
+  pointer-events: none;
+}
+
+form input:focus ~ label,
+form input:valid ~ label,
+form input:hover ~ label {
+  top: -16px;
+  left: 0px;
+  color: #f45c43;
+  font-size: 0.8em;
+}
+
+#email, #password {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgb(150, 150, 150);
+  outline: none;
+  color: white;
+  font-size: 1rem;
+  padding: 5px 0px;
+}
+
+#signup, #login{
+  background: #f45c43;
+  border-radius: 5px;
+  border: none;
+  position: relative;
+  color: white; 
+  padding: 0.5em 1.5em;
+  font-size: 1rem;
+  margin-top: 1.5rem;
+}
+
+form p{
+  position: relative;
+  top: 1.25em;
+  color: rgb(150, 150, 150);
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+form p a{
+  text-decoration: none;
+  color: royalblue;
+}
+
+
+/* ************** Dashboard **************** */
+
+.dashboard{
+  background-color: #282c34;
+  min-height: 100vh;
+  width: 90%;
+  max-width: 1440px;
+  color: white;
+  font-size: 1rem;
+}
+
+

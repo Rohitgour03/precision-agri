@@ -1,10 +1,13 @@
 // Initializing the server
 const express = require('express')
+const path = require('path')
 const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const mqtt = require('mqtt')
+const dotenv = require('dotenv')
+dotenv.config()
 
 const User = require('./models/user.models.js')
 const SensorData = require('./models/sensorData.models.js')
@@ -17,9 +20,11 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: true}))
 
 
+
 // Connecting with database using the mongoose
 mongoose.set('strictQuery', true);
-mongoose.connect('mongodb://localhost:27017/precision-agri', (err) => {
+const databaseUrl = process.env.MONGODB_URI; 
+mongoose.connect('mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.8.0', (err) => {
     if(err){
         console.log('unable to connect!!', err);
     } else {
@@ -58,6 +63,7 @@ const mqttClient = mqtt.connect(`https://eu1.cloud.thethings.network`, options);
 var globalMQTT = 0;
 
 // SOCKET
+/*
 io.on("connection", function(socket)
 {
   console.log("Client connected: " + socket.id);
@@ -75,6 +81,7 @@ io.on("connection", function(socket)
   }
   setInterval(intervalFunc, 2000);
 });
+*/
 
 mqttClient.on('connect', () => {
     mqttClient.subscribe(`#`);
@@ -129,14 +136,18 @@ mqttClient.on('close', function(){
 })
 
 
-
-
+app.use(express.static(path.join(__dirname, '../client/build')));
 app.get('/', (req, res) => {
-    res.send("Hello world!")
+    // res.send("Hello world!!!!!!!!!!!!")
+    res.sendFile(path.join(__dirname, '../', 'client', 'build', 'index.html'));
+})
+
+app.get('/register', (req, res) => {
+    res.sendFile(path.join(__dirname, '../', 'client', 'build', 'index.html'));
 })
 
 // API endpoint for Registering the User
-app.post('/api/register', async (req, res) => { 
+app.post('/register', async (req, res) => { 
     try {
         await User.create({
             email: req.body.email,
@@ -150,8 +161,12 @@ app.post('/api/register', async (req, res) => {
     
 })
 
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, '../', 'client', 'build', 'index.html'));
+})
+
 // API endpoint for Logging the User
-app.post('/api/login', async (req, res) => {  
+app.post('/login', async (req, res) => {  
     const user = await User.findOne({
         email: req.body.email,
         password: req.body.password,
@@ -171,7 +186,7 @@ app.post('/api/login', async (req, res) => {
 })
 
 // API endpoint to show the Dashboard
-app.get('/api/dashboard', async (req, res) => {
+app.get('/dashboard', async (req, res) => {
 
     const token = req.headers['x-access-token']  
     try {
@@ -187,9 +202,11 @@ app.get('/api/dashboard', async (req, res) => {
     }
 } )
 
+const PORT = process.env.PORT || 5000;
+
 // Server listening on the port 1337
-app.listen(1337, () => {
-    console.log('server started on the port 1337');
+app.listen(PORT, () => {
+    console.log(`server started on the port ${PORT}`);
 })
 
 /*

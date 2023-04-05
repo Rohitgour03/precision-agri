@@ -1,4 +1,5 @@
 import {useState} from 'react'
+import '../App.css'
 import { useNavigate } from 'react-router-dom';
 
 function App() {
@@ -9,7 +10,7 @@ function App() {
 
   async function loginUser(event){
     event.preventDefault();
-    const response = await fetch('http://localhost:1337/api/login', {
+    const response = await fetch('http://45.79.125.11/login', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -32,31 +33,42 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div className="App-header">
+      <header className="login-ctn">
         <h1>Login</h1>
         <form action="#" method='POST' onSubmit={(e) => loginUser(e)}>
-          <input 
-            type="email" 
-            name="email" 
-            id="email" 
-            placeholder="Email"
-            value={email}
-            onChange={ (e) => setEmail(e.target.value)} />
-            <br />
-
-          <input 
-            type="password" 
-            name="password" 
-            id="password" 
-            placeholder="password"
-            value={password}
-            onChange={ (e) => setPassword(e.target.value)} />
-            <br />
+          <div className='email-ctn'>
+            <input 
+              type="email" 
+              name="email" 
+              id="email" 
+              value={email}
+              className="email-input"
+              onChange={ (e) => setEmail(e.target.value)}
+              required />
+              <label htmlFor="email">Email</label>
+          </div>
+          
+          <div className='password-ctn'>
+            <input 
+              type="password" 
+              name="password" 
+              id="password" 
+              value={password}
+              className="password-input"
+              onChange={ (e) => setPassword(e.target.value)}
+              required />
+              <label htmlFor="password">Password</label>
+          </div>
 
           <input 
             type="submit" 
-            value="submit" />
+            value="submit"
+            name="login"
+            id="login"
+            className='submit-btn' />
+
+          <p>New User? <a href="/register">Register yourself</a></p>
         </form>
       </header>
     </div>

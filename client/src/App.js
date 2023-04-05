@@ -1,8 +1,9 @@
 import React from "react";
+import './App.css'
 
 const App = () => {
-    return <div>
-        Hello world!!!
+    return <div className="App-header">
+        <div className="App">Hello world!!!</div>
     </div>
 }
 
