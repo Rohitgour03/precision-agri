@@ -154,8 +154,10 @@ app.post('/register', async (req, res) => {
             password: req.body.password,
         })
         res.json({status: 'ok'}); 
+        alert('User is successfully registered !')
     } catch (error) {
         console.log(error);
+        alert('This email is already registered !');
         res.json({status: 'error', error: 'Duplicate Email'}); 
     }
     
@@ -178,24 +180,47 @@ app.post('/login', async (req, res) => {
             },
             'secret123'
         )
-        
+        console.log(res.json({ status: 'ok', user: token}))
         return res.json({ status: 'ok', user: token})
     } else{
         return res.json({ status: 'error', user: false})
     }
 })
 
+app.post('/logout', async (req, res) => {
+
+    const token = req.headers['x-access-token']
+    console.log(token)
+    try {
+        const decoded = jwt.verify(token, 'secret123', (err, user) => {
+            if(err){
+                console.log(err)
+                return res.status(403).json({message: "Authentication Failed"})
+            }
+        })
+        console.log(decoded)
+        localStorage.removeItem('token')
+        console.log("User successfully logged out")
+        return res.status(200).json({message: "User successfully logged out"})
+    } catch (error) {
+        console.log(error)
+        res.json({status: 'error'})
+    }
+    
+})
+
 // API endpoint to show the Dashboard
 app.get('/dashboard', async (req, res) => {
 
     const token = req.headers['x-access-token']  
+   
     try {
         const decoded = jwt.verify(token, 'secret123')
         const email = decoded.email
         const user = await User.findOne({email: email})
         const sensorData = await SensorData.find({deviceId: 'soil-moisture-sensor'})
 
-        res.json({status: 'ok', user: user, sensorData: sensorData})
+        res.json({status: 'ok', user: user, sensorData: sensorData, request: req})
     } catch (error) {
         console.log(error)
         res.json({ status: 'error', error: 'invalid token'})

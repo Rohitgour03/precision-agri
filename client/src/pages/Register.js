@@ -22,10 +22,11 @@ function App() {
     })
     
     const data = await response.json();
-    console.log(data);
 
     if(data.status === 'ok'){
-      navigate('/login');
+      navigate('/login')
+    } else{
+      alert('This Email is already registered, Try to login')
     }
   }
 
@@ -59,7 +60,7 @@ function App() {
                 onChange={ (e) => setPassword(e.target.value)}
                 required />
               <label htmlFor="password">Password</label>
-            </div>
+            </div> 
 
 
             <input 

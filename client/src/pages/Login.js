@@ -1,12 +1,16 @@
 import {useState} from 'react'
 import '../App.css'
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { authActions } from '../store/index'
 
 function App() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector(state => state.isLoggedIn)
 
   async function loginUser(event){
     event.preventDefault();
@@ -19,11 +23,13 @@ function App() {
         email,
         password
       })
-    })
+    }) 
     
     const data = await response.json();
 
     if(data.user){
+      dispatch(authActions.login())
+      console.log(isLoggedIn)
       alert('Login successful')
       localStorage.setItem('token', data.user);
       navigate("/dashboard")
@@ -48,7 +54,7 @@ function App() {
               required />
               <label htmlFor="email">Email</label>
           </div>
-          
+           
           <div className='password-ctn'>
             <input 
               type="password" 

@@ -1,6 +1,15 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 .App {
   color: white;
-  text-align: center;
+  min-height: 100vh;
+  background-color: #282c34;
 }
 
 .App-header {
@@ -14,21 +23,192 @@
   color: white;
 }
 
+.page-ctn {
+  width: 90%;
+  margin: 0 auto;
+  max-width: 1240px;
+  padding: 2rem 0;
+}
+
+/* ***************** Styling for Navbar ******************* */
+
+.home-section {
+  min-height: 100vh;
+}
+
+.navbar-ctn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 2rem;
+  margin: 0;
+  font-weight: bold;
+}
+
+nav {
+  margin-left: auto;
+  margin-right: 4rem;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  font-size: 1.1rem;
+}
+
+.nav-link {
+  margin: 0 1rem;
+  cursor: pointer;
+}
+
+.nav-link a {
+  color: white;
+  text-decoration: none;
+}
+
+.signup-btn {
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  padding: 0.65rem 2rem;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  background-color: #f45c43;
+}
+
+.hero-ctn {
+  margin-top: 7rem;
+  width: 80%;
+  max-width: 550px;
+}
+
+.main-heading {
+  font-size: 3.5rem;
+  font-weight: 800;
+}
+
+.main-text {
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  color: rgb(202, 202, 202);
+  line-height: 1.65;
+}
+
+.cta-btn {
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  padding: 1rem 2.5rem;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: #f45c43;
+}
+
+
+section {
+  margin-bottom: 5rem;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.section-heading {
+  font-size: 2rem;
+}
+
+section p {
+  font-size: 1.125rem;
+  line-height: 1.75;
+  width: 90%;
+  max-width: 1000px;
+  color: rgb(202, 202, 202);
+}
+
+/* *********** Styling for contact us page ****************** */
+
+.container {
+  padding: 30px 20px;
+  margin: 2rem 0;
+  width: 80%;
+  max-width: 1000px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+#contact-us-form {
+  display: flex;
+  flex-direction: column;
+}
+
+#contact-us-form label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+#contact-us-form input,
+#contact-us-form textarea {
+  padding: 10px;
+  border: none;
+  font: inherit;
+  width: 100%;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background: white;
+}
+
+.name_email-ctn {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.name_email-ctn div {
+  flex: 1;
+}
+
+#contact-us-form input[type="submit"] {
+  color: #fff;
+  width: 200px;
+  margin: 1rem 0;
+  cursor: pointer;
+  font-weight: 500;
+  background-color: #f45c43;
+  transition: background-color 300ms;
+}
+
+#contact-us-form input[type="submit"]:hover {
+  background-color: #eb462d;
+}
+
 
 /* ********** Style for register and login form ************* */
 
-.register-ctn, .login-ctn{
+.register-ctn,
+.login-ctn {
   width: 80%;
   max-width: 400px;
 }
 
-.email-ctn, .password-ctn{
+.email-ctn,
+.password-ctn {
   position: relative;
   font-size: 1rem;
   margin: 1.5em 0em 0em;
 }
 
-form label{
+.password-ctn {
+  margin-bottom: 1.5rem;
+}
+
+form label {
   position: absolute;
   top: 0;
   left: 0;
@@ -37,16 +217,17 @@ form label{
   pointer-events: none;
 }
 
-form input:focus ~ label,
-form input:valid ~ label,
-form input:hover ~ label {
+form input:focus~label,
+form input:valid~label,
+form input:hover~label {
   top: -16px;
   left: 0px;
   color: #f45c43;
   font-size: 0.8em;
 }
 
-#email, #password {
+#email,
+#password {
   width: 100%;
   background: transparent;
   border: none;
@@ -57,18 +238,20 @@ form input:hover ~ label {
   padding: 5px 0px;
 }
 
-#signup, #login{
+#signup,
+#login,
+.logout-btn {
   background: #f45c43;
   border-radius: 5px;
   border: none;
   position: relative;
-  color: white; 
+  color: white;
   padding: 0.5em 1.5em;
   font-size: 1rem;
-  margin-top: 1.5rem;
+  cursor: pointer;
 }
 
-form p{
+form p {
   position: relative;
   top: 1.25em;
   color: rgb(150, 150, 150);
@@ -76,7 +259,7 @@ form p{
   text-align: left;
 }
 
-form p a{
+form p a {
   text-decoration: none;
   color: royalblue;
 }
@@ -84,13 +267,13 @@ form p a{
 
 /* ************** Dashboard **************** */
 
-.dashboard{
+.dashboard {
   background-color: #282c34;
   min-height: 100vh;
-  width: 90%;
-  max-width: 1440px;
   color: white;
   font-size: 1rem;
 }
 
-
+.heading {
+  margin-top: 2rem;
+}

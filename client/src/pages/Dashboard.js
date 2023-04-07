@@ -10,6 +10,7 @@ import TableRow from '@mui/material/TableRow';
 
 // import jwt from 'jsonwebtoken'
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 
 const columns = [
     { 
@@ -57,7 +58,6 @@ const Dashboard = () => {
 
         const data = await req.json()
         setSensorData(data.sensorData)
-        console.log(sensorData);
 
         if(data.status === 'ok'){
             alert("User successfully authenticated")
@@ -68,6 +68,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('token')
+        
         if(token){
             const user = (token) => {
                 var base64Url = token.split('.')[1];
@@ -81,6 +82,8 @@ const Dashboard = () => {
             } else{
                 showDashboard();
             }
+        } else{
+          navigate('/login')
         }
     }, [])
 
@@ -90,43 +93,19 @@ const Dashboard = () => {
         return { deviceId, moisture, recievedAt, timestamp  }
     })
 
-    console.log(rows);
-    return StickyHeadTable(rows);
+    return <div className='dashboard'>
+      <div className='page-ctn'>
+        <Navbar />
+        <header>
+          <h1 className='heading'>Dashboard</h1>
+        </header>
+        <div className='table-ctn'>
+          {StickyHeadTable(rows)}
+        </div>
+      </div>
+    </div>
+    
   }
-
-   
-
-//     const readings = sensorData.map((reading) => {
-//         return (<tr>
-//             <td>{reading.deviceId}</td>
-//             <td>{reading.payload.moisture}</td>
-//             <td>{reading.recievedAt}</td>
-//             <td>{reading.timestamp}</td>
-//         </tr>);
-//     })
-
-//     return <div className='App-header'>
-//         <header>
-//             <h1>User Dashboard!</h1>
-//         </header>
-//         <table>
-//             <thead>
-//                 <tr>
-//                     <th>deviceId</th>
-//                     <th>Moisture</th>
-//                     <th>recievedAt</th>
-//                     <th>timestamp</th>
-//                 </tr>
-//             </thead>
-//             <tbody>
-//                 {readings}
-//             </tbody>
-//         </table>
-
-//     </div>
-// }
-
-
 
 function StickyHeadTable(rows) {
     const [page, setPage] = React.useState(0);
@@ -192,3 +171,37 @@ function StickyHeadTable(rows) {
   }
 
   export default Dashboard;
+
+
+
+
+
+  //     const readings = sensorData.map((reading) => {
+//         return (<tr>
+//             <td>{reading.deviceId}</td>
+//             <td>{reading.payload.moisture}</td>
+//             <td>{reading.recievedAt}</td>
+//             <td>{reading.timestamp}</td>
+//         </tr>);
+//     })
+
+//     return <div className='App-header'>
+//         <header>
+//             <h1>User Dashboard!</h1>
+//         </header>
+//         <table>
+//             <thead>
+//                 <tr>
+//                     <th>deviceId</th>
+//                     <th>Moisture</th>
+//                     <th>recievedAt</th>
+//                     <th>timestamp</th>
+//                 </tr>
+//             </thead>
+//             <tbody>
+//                 {readings}
+//             </tbody>
+//         </table>
+
+//     </div>
+// }
