@@ -15,20 +15,22 @@ const Navbar = (props) => {
  
     async function logout(e){
 
-        const res = await fetch('http://45.79.125.11/logout', {
+        const response = await fetch('http://45.79.125.11/logout', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
             },
+            body: null
         })
 
-        const data = await res.json();
+        const data = await response.json();
         console.log(data)
 
         if(data.status === 200){
             dispatch(authActions.logout())
             console.log(isLoggedIn)
             alert('Successfully Logged Out')
+            localStorage.removeItem('token')
             navigate("/login")
         } else{
             alert('Logging out failed, Please try again'); 

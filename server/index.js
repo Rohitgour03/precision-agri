@@ -199,8 +199,7 @@ app.post('/logout', async (req, res) => {
             }
         })
         console.log(decoded)
-        localStorage.removeItem('token')
-        console.log("User successfully logged out")
+        console.log("User successfully logged out")                                                     
         return res.status(200).json({message: "User successfully logged out"})
     } catch (error) {
         console.log(error)
