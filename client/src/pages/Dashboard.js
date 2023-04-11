@@ -8,6 +8,17 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
+
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer
+} from "recharts";
+
 // import jwt from 'jsonwebtoken'
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
@@ -93,6 +104,19 @@ const Dashboard = () => {
         return { deviceId, moisture, recievedAt, timestamp  }
     })
 
+    async function handlePredict(){
+      const data20 = rows.slice(rows.length()-21, rows.length()-1)
+      const res = await fetch('http://localhost:5000/predict', {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify({data: data20})
+      })
+      const data = await res.json()
+      console.log("Predicted data: ", data)
+    }
+
     return <div className='dashboard'>
       <div className='page-ctn'>
         <Navbar />
@@ -101,6 +125,14 @@ const Dashboard = () => {
         </header>
         <div className='table-ctn'>
           {StickyHeadTable(rows)}
+        </div>
+
+        <div className='graph-ctn'>
+          {graph(rows)}
+        </div>
+
+        <div className='model-ctn'>
+          <button onClick={handlePredict}>Predict Moisture data</button>
         </div>
       </div>
     </div>
@@ -170,7 +202,28 @@ function StickyHeadTable(rows) {
     );
   }
 
-  export default Dashboard;
+function graph(data){
+
+  return (
+    <ResponsiveContainer width="100%" height={500} >
+      <AreaChart data={data} margin={{ top: 40, right: 30, left: 0, bottom: 0 }}>
+        <defs>
+          <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#f45c43" stopOpacity={0.8}/>
+            <stop offset="95%" stopColor="#f45c43" stopOpacity={0}/>
+          </linearGradient>
+        </defs>
+        <XAxis dataKey="recievedAt" />
+        <YAxis />
+        <CartesianGrid strokeDasharray="3 3" />
+        <Tooltip />
+        <Area type="monotone" dataKey="moisture" stroke="#f45c43" fillOpacity={1} fill="url(#colorUv)" />
+      </AreaChart>
+    </ResponsiveContainer>
+  )
+}
+
+export default Dashboard;
 
 
 
