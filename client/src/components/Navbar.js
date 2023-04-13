@@ -13,20 +13,20 @@ const Navbar = (props) => {
         navigate('/register')
     }
  
-    async function logout(e){
+    async function handleLogout(e){
 
-        const response = await fetch('http://45.79.125.11/logout', {
+        const token = localStorage.getItem('token')
+        const res = await fetch('http://45.79.125.11/signout', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
+                'x-access-token': token,
             },
-            body: null
-        })
-
-        const data = await response.json();
+        }) 
+        const data = await res.json();
         console.log(data)
-
-        if(data.status === 200){
+        
+        if(data.status === 'ok'){
             dispatch(authActions.logout())
             console.log(isLoggedIn)
             alert('Successfully Logged Out')
@@ -62,14 +62,12 @@ const Navbar = (props) => {
             </ul>
         </nav>
         {
-            !isLoggedIn && 
+            !isLoggedIn ?
                 <div className='signup-btn-ctn'>
                     <button className='signup-btn' onClick={(e) => signup(e)}>Sign up</button>
-                </div>
-        }{
-            isLoggedIn &&
+                </div> : 
                 <div className='logout-btn-ctn'>
-                    <button className='logout-btn' onClick={(e) => logout(e)}>Log out</button>
+                    <button className='logout-btn' onClick={(e) => handleLogout(e)}>Log out</button>
                 </div>
         }
     </div>
